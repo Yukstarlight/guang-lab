@@ -1082,6 +1082,10 @@ class MainActivity : Activity() {
                 packageManager.checkPermission(it, e.pkg) != android.content.pm.PackageManager.PERMISSION_GRANTED
             }
             val targets = if (szp.isNotEmpty()) szp else missing
+            // 状态快照：已经授权过的项也记一行，这样每次的报告项数固定，不会忽多忽少
+            for (p in adbPerms) {
+                if (p !in missing) sb.append("R|perm|" + p + "|ok|已有\n")
+            }
 
 
             // 3) 有脚本先跑脚本（Scene 这类），再授权限
@@ -1101,8 +1105,13 @@ class MainActivity : Activity() {
             for (op in arrayOf("GET_USAGE_STATS", "MANAGE_EXTERNAL_STORAGE", "SYSTEM_ALERT_WINDOW")) {
                 sb.append(Ops.run(this, "appops", e.pkg, op).out)
             }
-            if (script == null && targets.isEmpty()) {
+            // 黑阈有自己的启动器（/data/local/tmp/brevent.sh），不算「没有可用方式」
+            val special = e.pkg == "me.piebridge.brevent"
+            if (script == null && targets.isEmpty() && !special) {
                 sb.append("R|sys|没有可用的授权方式|skip|它既没放激活脚本，也没申请 ADB / Shizuku 权限\n")
+            }
+            if (e.pkg == "me.piebridge.brevent") {
+                sb.append(Ops.run(this, "brevent_up", e.pkg).out)
             }
             if (szp.isNotEmpty()) {
                 Priv.dispatchPackageChanged(e.pkg)   // 尽力而为，不承诺效果

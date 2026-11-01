@@ -109,12 +109,25 @@ case "$A" in
     ;;
 
   appops)
+    # 两条命令都写一遍（cmd appops 与 appops 在部分 ROM 上只有一条生效）
     o=$(appops set "$P" "$E" allow 2>&1)
-    v=$(appops get "$P" "$E" 2>/dev/null | head -n 1)
-    case "$v" in
-      *allow*) echo "R|op|$E|ok|" ;;
-      *) echo "R|op|$E|skip|该 ROM 不接受这个 AppOp 写入" ;;
-    esac
+    cmd appops set "$P" "$E" allow >/dev/null 2>&1
+    # EMUI 的 AppOp 写入是异步的：最多读 6 次，间隔 0.5s
+    i=0
+    ok=false
+    while [ $i -lt 6 ]; do
+      v=$(appops get "$P" "$E" 2>/dev/null | head -n 1)
+      case "$v" in
+        *allow*) ok=true; break ;;
+      esac
+      i=$((i + 1))
+      sleep 0.5 2>/dev/null || sleep 1
+    done
+    if [ "$ok" = true ]; then
+      echo "R|op|$E|ok|"
+    else
+      echo "R|op|$E|skip|该 ROM 不接受这个 AppOp 写入"
+    fi
     ;;
 
   perm_grant)
@@ -357,6 +370,20 @@ PROPEOF
         done
       fi
     done
+    exit 0
+    ;;
+  brevent_up)
+    if [ ! -f /data/local/tmp/brevent.sh ]; then
+      echo "R|act|黑阈脚本|fail|/data/local/tmp/brevent.sh 不存在，先在黑阈里点一次激活生成它"
+      exit 0
+    fi
+    nohup sh /data/local/tmp/brevent.sh >/dev/null 2>&1 &
+    sleep 3
+    if ps -A 2>/dev/null | grep -q brevent_server; then
+      echo "R|act|黑阈 daemon|ok|已以 shell 身份运行"
+    else
+      echo "R|act|黑阈 daemon|fail|进程没起来（看黑阈自己怎么说）"
+    fi
     exit 0
     ;;
   server_state)

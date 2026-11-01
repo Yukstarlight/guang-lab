@@ -54,6 +54,7 @@ Android **系统级权限工具箱**（minSdk 26 / targetSdk 34）。所有操�
 
 - 系统级（priv-app）：通道页可用 Root 生成 Magisk 模块（含 `privapp-permissions-guanglab.xml` 白名单），重启后冻结走系统 API
 - 屏幕灰度：`accessibility_display_daltonizer` 单色开关，可逆、不改亮度与分辨率
+- 黑阈（v1.0.7 起）：可用 shell 拉起 `/data/local/tmp/brevent.sh` 并检测 `brevent_server` 是否在跑
 
 ## 结构
 
@@ -69,7 +70,7 @@ app/src/main/java/com/guang/lab/
 app/src/main/res/raw/
 ├── grant.sh           一键授权合并脚本
 ├── revoke.sh          撤销合并脚本
-└── ops.sh             单动作脚本（冻结/卸载/无障碍/AppOps/权限…）
+└── ops.sh             单动作脚本（冻结/卸载/无障碍/AppOps/权限/黑阈…）
 ```
 
 ## 安全模型
@@ -102,6 +103,19 @@ node test/expand.mjs
 bash test/run.sh
 ```
 
+## 更新记录
+
+### v1.0.7
+
+- **AppOps 写入兼容性**：同时执行 `appops set` 与 `cmd appops set`（部分 ROM 只有其中一条生效），回读改成**最多 6 次、间隔 0.5 秒轮询**——EMUI 一类的系统 AppOp 写入是异步的，一次读不到就报 `skip` 属于误判
+- **黑阈（Brevent）支持**：新增 `brevent_up`，以 shell 身份拉起 `/data/local/tmp/brevent.sh` 并检测 `brevent_server` 是否在跑；同时修掉「黑阈被误判成没有可用授权方式」
+- **报告项数固定**：已授权的项也会记一行 `R|perm|…|ok|已有`，每次体检的报告项数不再忽多忽少
+
+### v1.0.3（安全更新，旧版用户请升级）
+
+1. **脚本执行路径越界（高危，已修）**：旧版只要求 `run_script` 的脚本路径落在 `/sdcard/` 或 `/storage/emulated/0/` 下，任何能写共享存储的应用都能塞一个 `.sh` 让本应用以 **shell 身份**执行。1.0.3 起路径必须位于**目标包自己的** `Android/data/<pkg>/` 目录内，其它路径一律拒绝。
+2. **重装 / 换签名后 Shizuku 授权失效（高危，已修）**：重装后 binder 层不再承认旧授权记录（系统里看着还是「已授予」），导致通道静默失效、操作看着成功其实没生效。1.0.3 起启动时检测并主动重新请求授权。
+
 ## 已知限制
 
 - **签名级 / 系统专属权限** shell 也无权授予，报告里的 ✕ 属正常
@@ -117,12 +131,3 @@ bash test/run.sh
 ## 协议
 
 [GPL-3.0](LICENSE) © 2026 Yukstarlight
-
-## 安全更新（v1.0.3）
-
-本版修复两个高危问题，**建议所有 1.0.1 用户立即升级**：
-
-1. **脚本执行路径越界（高危，已修）**：旧版只要求 un_script 的脚本路径落在 \/sdcard/\ 或 \/storage/emulated/0/\ 下，任何能写共享存储的应用都能塞一个 \.sh\ 让本应用以 **shell 身份**执行。1.0.3 起路径必须位于**目标包自己的** \Android/data/<pkg>/\ 目录内，其它路径一律拒绝。
-2. **重装 / 换签名后 Shizuku 授权失效（高危，已修）**：重装应用后 binder 层不再承认旧的授权记录（即使系统里 runtime 权限显示已授予），导致通道静默失效、操作看起来"成功"其实没生效。1.0.3 起启动时会检测并主动重新请求授权。
-
-历史版本（1.0.1）的提交记录已随源码重写一并清除，仓库仅保留当前版本历史。

@@ -43,7 +43,7 @@ object Ops {
     private val ACTIONS = setOf(
         "freeze", "unfreeze", "uninstall", "restore", "forcestop", "clear", "start",
         "battery", "unbattery", "appops", "perm_grant", "perm_revoke", "shizuku_on", "shizuku_off",
-        "suspend", "hide", "gray_on", "gray_off", "install_priv", "scan_adb", "scan_pkg", "run_script", "server_state",
+        "suspend", "hide", "gray_on", "gray_off", "install_priv", "scan_adb", "scan_pkg", "run_script", "server_state", "brevent_up",
         "acc_on", "acc_off", "nl_on", "nl_off", "admin_on", "admin_off",
         "listdisabled", "listuninstalled"
     )
