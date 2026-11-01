@@ -1,0 +1,5 @@
+#!/bin/sh
+case "$1" in
+  get) echo "$3: allow" ;;
+  *) exit 0 ;;
+esac

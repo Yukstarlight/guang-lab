@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 图标照 NekoType 的 assets/favicon.svg 构造：深色底 + 渐变圆 + 白猫 + 胡须；渐变换成 紫→粉→金 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path android:pathData="M54,54 m-31,0 a31,31 0 1,0 62,0 a31,31 0 1,0 -62,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="26"
+                android:startY="22"
+                android:endX="84"
+                android:endY="88">
+                <item android:offset="0" android:color="#C8A2FF" />
+                <item android:offset="0.45" android:color="#FF9BD1" />
+                <item android:offset="1" android:color="#FFC24B" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.97"
+        android:pathData="M40,33 L30,16 L50,28 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.97"
+        android:pathData="M68,33 L78,16 L58,28 Z" />
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,30 C44,30 36.5,37.5 36.5,47 V61 C36.5,71 44.5,79 54,79 C63.5,79 71.5,71 71.5,61 V47 C71.5,37.5 64,30 54,30 Z" />
+
+    <path
+        android:fillColor="#7C5CFF"
+        android:pathData="M45.8,51 m-4.2,0 a4.2,4.2 0 1,0 8.4,0 a4.2,4.2 0 1,0 -8.4,0" />
+    <path
+        android:fillColor="#7C5CFF"
+        android:pathData="M62.2,51 m-4.2,0 a4.2,4.2 0 1,0 8.4,0 a4.2,4.2 0 1,0 -8.4,0" />
+    <path
+        android:fillColor="#7C5CFF"
+        android:pathData="M54,64 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.6"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:pathData="M24,48.5 h13" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.6"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:pathData="M24,56.5 h13" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.6"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:pathData="M71,48.5 h13" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.6"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:pathData="M71,56.5 h13" />
+</vector>

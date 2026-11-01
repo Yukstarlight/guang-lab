@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:colorPrimary">@color/accent_purple</item>
+        <item name="android:colorPrimaryDark">@color/bg_0</item>
+        <item name="android:colorAccent">@color/accent_purple</item>
+        <item name="android:windowBackground">@drawable/bg_app</item>
+        <item name="android:statusBarColor">#0B1020</item>
+        <item name="android:navigationBarColor">#04050A</item>
+        <item name="android:textColorPrimary">@color/fg_0</item>
+        <item name="android:textColorSecondary">@color/fg_1</item>
+        <item name="android:alertDialogTheme">@style/AppDialog</item>
+        <item name="android:colorControlNormal">@color/fg_1</item>
+        <item name="android:colorControlActivated">@color/accent_purple</item>
+        <item name="android:colorControlHighlight">#33C8A2FF</item>
+        <item name="android:windowAnimationStyle">@style/AppWindowAnim</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppWindowAnim" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/cyber_activity_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/cyber_activity_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/cyber_activity_enter</item>
+        <item name="android:activityCloseExitAnimation">@null</item>
+    </style>
+
+    <style name="PopAnim" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/cyber_pop_enter</item>
+        <item name="android:windowExitAnimation">@anim/cyber_pop_exit</item>
+    </style>
+
+    <style name="AppDialog" parent="@android:style/Theme.Material.Dialog.Alert">
+        <item name="android:colorAccent">@color/accent_purple</item>
+        <item name="android:textColorPrimary">@color/fg_0</item>
+        <item name="android:textColorSecondary">@color/fg_1</item>
+        <item name="android:windowBackground">@drawable/bg_dialog</item>
+        <item name="android:windowEnterAnimation">@anim/cyber_pop_enter</item>
+        <item name="android:windowExitAnimation">@anim/cyber_pop_exit</item>
+        <item name="android:windowMinWidthMajor">88%</item>
+        <item name="android:windowMinWidthMinor">88%</item>
+        <item name="android:backgroundDimAmount">0.6</item>
+    </style>
+
+    <style name="AppTheme.Main" parent="@style/AppTheme">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+</resources>

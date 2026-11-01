@@ -1,0 +1,79 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.guang.lab'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.guang.lab"
+        minSdk 26
+        targetSdk 34
+        versionCode 4
+        versionName "1.0.3"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    lint {
+        disable 'QueryAllPackagesPermission'
+    }
+    packaging {
+        resources {
+            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE*', 'META-INF/NOTICE*', 'META-INF/versions/9/OSGI-INF/MANIFEST.MF']
+        }
+    }
+}
+
+dependencies {
+    // Shizuku：api = 客户端 API；provider = ContentProvider 传 binder；aidl = 直连服务端 newProcess
+    implementation 'dev.rikka.shizuku:api:13.1.5'
+    implementation 'dev.rikka.shizuku:provider:13.1.5'
+    implementation 'dev.rikka.shizuku:aidl:13.1.5'
+
+    // 无线调试 ADB 通道（免 Shizuku，Android 11+ 配对）
+    implementation 'com.github.MuntashirAkon:libadb-android:3.0.0'
+    // ADB TLS 客户端证书：自签 X.509
+    implementation 'org.bouncycastle:bcpkix-jdk15to18:1.78'
+}
+
+def ksPropsFile = rootProject.file("keystore.properties")
+def ksProps = new Properties()
+if (ksPropsFile.exists()) {
+    ksProps.load(new FileInputStream(ksPropsFile))
+}
+def hasReleaseKey = ksProps.getProperty("storeFile") != null &&
+        rootProject.file(ksProps.getProperty("storeFile")).exists()
+
+android {
+    signingConfigs {
+        release {
+            if (hasReleaseKey) {
+                storeFile rootProject.file(ksProps.getProperty("storeFile"))
+                storePassword ksProps.getProperty("storePassword")
+                keyAlias ksProps.getProperty("keyAlias")
+                keyPassword ksProps.getProperty("keyPassword")
+            }
+        }
+    }
+    buildTypes {
+        release {
+            if (hasReleaseKey) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+}

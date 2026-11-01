@@ -1,0 +1,9 @@
+#!/bin/sh
+c="$1"; shift
+case "$c" in
+  uninstall) echo "Success" ;;
+  clear) echo "Success" ;;
+  list) case "$*" in *-d*) echo "package:com.test.app" ;; *) echo "package:com.test.app" ;; esac ;;
+  *) exit 0 ;;
+esac
+exit 0
